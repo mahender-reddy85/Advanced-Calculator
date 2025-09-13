@@ -226,6 +226,12 @@ select:focus-visible {
     width: auto;
   }
 
+  .nav-emoji,
+  .nav-text {
+    margin: 0;
+    padding: 0;
+  }
+
   .nav-btn.active .nav-emoji,
   .nav-btn.active .nav-text,
   .nav-btn:hover .nav-emoji,
