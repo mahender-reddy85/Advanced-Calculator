@@ -632,4 +632,22 @@ select:focus-visible {
     padding: 0.25rem 0;
     height: auto;
   }
+
+  .content-area {
+    height: auto;
+    display: block;
+    flex-grow: 0;
+  }
+
+  .view {
+    height: auto;
+    padding-bottom: 0.5rem;
+    display: block;
+    flex-grow: 0;
+  }
+
+  .calculator-container {
+    height: auto;
+    flex-grow: 0;
+  }
 }
