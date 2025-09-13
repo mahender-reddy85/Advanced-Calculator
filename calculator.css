@@ -218,12 +218,18 @@ select:focus-visible {
   color: var(--accent-blue);
 }
 
-.nav-btn.active .nav-emoji,
-.nav-btn.active .nav-text,
-.nav-btn:hover .nav-emoji,
-.nav-btn:hover .nav-text {
-  background-color: yellow;
-  border-radius: var(--radius-sm);
+@media (max-width: 767px) {
+  .nav-btn {
+    padding: 0.1rem 0.3rem;
+  }
+
+  .nav-btn.active .nav-emoji,
+  .nav-btn.active .nav-text,
+  .nav-btn:hover .nav-emoji,
+  .nav-btn:hover .nav-text {
+    background-color: yellow;
+    border-radius: var(--radius-sm);
+  }
 }
 
 /* CALCULATOR STYLES */
