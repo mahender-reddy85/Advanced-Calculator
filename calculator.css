@@ -32,6 +32,23 @@ select {
     outline: none;
 }
 
+input,
+textarea,
+select {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-element);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem;
+    transition: border-color var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent-blue);
+    outline: none;
+}
+
 button {
     cursor: pointer;
     background: none;
@@ -248,7 +265,8 @@ textarea:focus-visible {
 
 .calculator-screen {
     width: 100%;
-    background-color: var(--bg-main);
+    background-color: var(--bg-element);
+    border: 2px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: 1.5rem 3.5rem 1.5rem 1.5rem;
     font-size: var(--font-size-screen);
@@ -257,6 +275,13 @@ textarea:focus-visible {
     color: var(--text-primary);
     caret-color: var(--accent-blue);
     overflow-x: auto;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.calculator-screen:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px var(--glow-color);
+    outline: none;
 }
 
 .top-buttons {
@@ -283,14 +308,49 @@ textarea:focus-visible {
 
 .action-buttons button {
     padding: 0.75rem;
-    background-color: var(--bg-element);
+    background-color: var(--accent-blue);
+    color: white;
     border-radius: var(--radius-sm);
     font-weight: 600;
     transition: background-color var(--transition);
 }
 
 .action-buttons button:hover {
-    background-color: var(--border-color);
+    background-color: #2563eb;
+}
+
+.action-buttons button[id*="close"],
+.action-buttons button[id*="Close"] {
+    background-color: var(--accent-red);
+}
+
+.action-buttons button[id*="close"]:hover,
+.action-buttons button[id*="Close"]:hover {
+    background-color: #dc2626;
+}
+
+.action-buttons button[id*="calculate"],
+.action-buttons button[id*="Calculate"],
+.action-buttons button[id*="solve"],
+.action-buttons button[id*="Solve"] {
+    background-color: var(--accent-green);
+}
+
+.action-buttons button[id*="calculate"]:hover,
+.action-buttons button[id*="Calculate"]:hover,
+.action-buttons button[id*="solve"]:hover,
+.action-buttons button[id*="Solve"]:hover {
+    background-color: #16a34a;
+}
+
+.action-buttons button[id*="plot"],
+.action-buttons button[id*="Plot"] {
+    background-color: var(--accent-amber);
+}
+
+.action-buttons button[id*="plot"]:hover,
+.action-buttons button[id*="Plot"]:hover {
+    background-color: #d97706;
 }
 .action-buttons .full-width {
     grid-column: 1 / -1;
@@ -327,6 +387,11 @@ textarea:focus-visible {
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.key:hover {
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transform: translateY(-2px);
 }
 
 .key:active {
