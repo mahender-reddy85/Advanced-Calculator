@@ -627,4 +627,9 @@ select:focus-visible {
   .nav-btn {
     padding: 0.1rem 0.3rem;
   }
+
+  .app-nav {
+    padding: 0.25rem 0;
+    height: auto;
+  }
 }
