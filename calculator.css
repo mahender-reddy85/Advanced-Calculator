@@ -595,3 +595,10 @@ select:focus-visible {
       "paren-open paren-close ans clear backspace";
   }
 }
+
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 767px) {
+  .nav-btn {
+    padding: 0.25rem 0.5rem;
+  }
+}

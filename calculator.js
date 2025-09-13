@@ -1,3 +1,4 @@
+
 window.MathJax = {
     tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -1353,4 +1354,3 @@ window.addEventListener('DOMContentLoaded', () => {
     clearAll();
     if (screen) screen.focus();
 });
-
