@@ -236,7 +236,7 @@ select:focus-visible {
   .nav-btn.active .nav-text,
   .nav-btn:hover .nav-emoji,
   .nav-btn:hover .nav-text {
-    background-color: yellow;
+    
     border-radius: var(--radius-sm);
   }
 }
