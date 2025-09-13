@@ -204,6 +204,10 @@ select:focus-visible {
   font-size: 1.5rem;
 }
 
+.nav-emoji {
+  font-size: 1.5rem;
+}
+
 .nav-text {
   font-size: 0.75rem;
   font-weight: 600;
@@ -212,7 +216,14 @@ select:focus-visible {
 .nav-btn.active,
 .nav-btn:hover {
   color: var(--accent-blue);
+}
+
+.nav-btn.active .nav-emoji,
+.nav-btn.active .nav-text,
+.nav-btn:hover .nav-emoji,
+.nav-btn:hover .nav-text {
   background-color: yellow;
+  border-radius: var(--radius-sm);
 }
 
 /* CALCULATOR STYLES */
