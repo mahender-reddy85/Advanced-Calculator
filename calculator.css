@@ -245,6 +245,162 @@ textarea:focus-visible {
     background-color: var(--bg-element);
 }
 
+/* Highlight Graphing button active state with bright yellow background and blue text */
+#graphical-toggle.active {
+    background-color: #fffb00;
+    color: #2563eb; /* Bright blue */
+    font-weight: 700;
+}
+
+/* Sidebar adjustments for desktop */
+@media (min-width: 768px) {
+    .app-nav {
+        order: 0;
+        grid-area: nav;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 1.5rem;
+        gap: 0.75rem;
+        border-top: none;
+        border-right: 1px solid var(--border-color);
+        width: 220px; /* Adjusted width */
+        background-color: #1e293b; /* Darker navy background */
+    }
+
+    .nav-btn {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+        font-size: 1.25rem;
+        flex: 0;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
+        color: #2563eb;
+        background-color: #fffb00;
+        font-weight: 700;
+    }
+
+    .nav-text {
+        font-size: var(--font-size-body);
+    }
+}
+
+/* Graphical view styling */
+#graphical-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1e293b; /* Dark navy background */
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    color: var(--text-primary);
+}
+
+/* Graph output canvas styling */
+.graph-output {
+    flex-grow: 1;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: #000000; /* Black background for graph */
+}
+
+/* Latex output styling */
+#latex-output {
+    margin-top: 0.5rem;
+    color: #ffffff;
+    font-size: 1rem;
+    min-height: 1.5rem;
+}
+
+/* Graph controls container */
+.graph-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    align-items: center;
+}
+
+/* Function input styling */
+#function-input {
+    flex-grow: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+#function-input:focus {
+    box-shadow: 0 0 0 3px var(--accent-blue);
+}
+
+/* Buttons in graph controls */
+.graph-controls button {
+    background-color: var(--accent-blue);
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.graph-controls button:hover {
+    background-color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .app-nav {
+        width: 100%;
+        flex-direction: row;
+        border-top: 1px solid var(--border-color);
+        border-right: none;
+        padding: 0.5rem;
+        justify-content: space-around;
+    }
+
+    .nav-btn {
+        flex-direction: column;
+        font-size: 1.5rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-md);
+    }
+
+    #graphical-view {
+        padding: 0.5rem;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .graph-controls {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    #function-input {
+        width: 100%;
+    }
+
+    .graph-controls button {
+        width: 100%;
+    }
+}
+
 /* CALCULATOR VIEW & CONTAINER */
 #calculator-view {
     display: flex;
