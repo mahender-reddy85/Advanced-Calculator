@@ -475,10 +475,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         scientificToggle.addEventListener('click', () => toggleMode('scientific'));
         graphicalToggle.addEventListener('click', () => {
-            if (window.innerWidth < 768) {
-                showCustomAlert('Use Graphical Calculator in desktop for better view and export.');
-                return;
-            }
             toggleMode('graphical');
         });
         basicToggle.addEventListener('click', () => toggleMode('basic'));
