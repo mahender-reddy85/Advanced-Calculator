@@ -398,8 +398,7 @@ window.addEventListener('DOMContentLoaded', () => {
             appendInput(key);
         } else if (key === '%') { // Handle modulus separately if needed, or let it pass as operator
             appendInput('%');
-        }
-        else if (key === 'Enter') {
+        } else if (key === 'Enter') {
             e.preventDefault(); // Prevent default Enter behavior (e.g., submitting a form)
             handleFunction('equals');
         } else if (key === 'Backspace') {
