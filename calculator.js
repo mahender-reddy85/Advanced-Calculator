@@ -477,6 +477,7 @@ window.addEventListener('DOMContentLoaded', () => {
         graphicalToggle.addEventListener('click', () => {
             if (window.innerWidth < 768) {
                 showCustomAlert('Use Graphical Calculator in desktop for better view and export.');
+                return;
             }
             toggleMode('graphical');
         });

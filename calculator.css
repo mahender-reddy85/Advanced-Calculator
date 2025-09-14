@@ -765,6 +765,14 @@ button[id*="closeUnitConverterModal"]:hover {
     max-height: 90vh;
     overflow-y: auto;
 }
+
+.modal input, .modal textarea, .modal select {
+    color: #ffffff;
+    background-color: #333333;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px;
+}
 /* Other modal styles here... */
 
 
