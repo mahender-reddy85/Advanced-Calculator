@@ -63,8 +63,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     const historyList = safeGetElement('history-list');
     const themeToggle = safeGetElement('theme-toggle');
-    const historyPanel = safeGetElement('history-panel');
-    const historyToggle = safeGetElement('history-toggle');
     const voiceInputBtn = safeGetElement('voice-input');
 
     // New: Basic and Scientific calculator keys containers
@@ -492,13 +490,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     // --- HISTORY PANEL TOGGLE ---
-    if (historyToggle && historyPanel) {
-        historyToggle.addEventListener('click', () => {
-            historyPanel.classList.toggle('hidden');
-        });
-    } else {
-        console.warn("History toggle button or panel not found.");
-    }
+    // Removed history toggle button and panel event listener as history button is removed
 
     // --- VOICE INPUT ---
     if (voiceInputBtn) {

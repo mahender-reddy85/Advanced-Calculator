@@ -322,11 +322,15 @@ textarea:focus-visible {
 .action-buttons button[id*="close"],
 .action-buttons button[id*="Close"] {
     background-color: var(--accent-red);
+    color: white;
+    font-weight: 700;
+    border: 2px solid var(--accent-red);
 }
 
 .action-buttons button[id*="close"]:hover,
 .action-buttons button[id*="Close"]:hover {
     background-color: #dc2626;
+    border-color: #dc2626;
 }
 
 .action-buttons button[id*="calculate"],
@@ -334,6 +338,9 @@ textarea:focus-visible {
 .action-buttons button[id*="solve"],
 .action-buttons button[id*="Solve"] {
     background-color: var(--accent-green);
+    color: white;
+    font-weight: 700;
+    border: 2px solid var(--accent-green);
 }
 
 .action-buttons button[id*="calculate"]:hover,
@@ -341,19 +348,122 @@ textarea:focus-visible {
 .action-buttons button[id*="solve"]:hover,
 .action-buttons button[id*="Solve"]:hover {
     background-color: #16a34a;
+    border-color: #16a34a;
 }
 
 .action-buttons button[id*="plot"],
 .action-buttons button[id*="Plot"] {
     background-color: var(--accent-amber);
+    color: white;
+    font-weight: 700;
+    border: 2px solid var(--accent-amber);
 }
 
 .action-buttons button[id*="plot"]:hover,
 .action-buttons button[id*="Plot"]:hover {
     background-color: #d97706;
+    border-color: #d97706;
 }
 .action-buttons .full-width {
     grid-column: 1 / -1;
+}
+
+/* Select dropdown styling */
+select {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem;
+    font-weight: 600;
+    transition: border-color var(--transition);
+}
+
+select:focus {
+    border-color: var(--accent-blue);
+    outline: none;
+}
+
+option {
+    background-color: var(--bg-element);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Additional button styling for specific buttons */
+button[id*="matrixCalculate"],
+button[id*="solveEquation"],
+button[id*="convertBase"],
+button[id*="calculateStats"],
+button[id*="plotFunctionBtn"],
+button[id*="plotFunctionAndDerivativeBtn"],
+button[id*="solveProblemBtnModal"] {
+    background-color: var(--accent-green);
+    color: white;
+    font-weight: 700;
+    border: 2px solid var(--accent-green);
+    transition: all var(--transition);
+}
+
+button[id*="matrixCalculate"]:hover,
+button[id*="solveEquation"]:hover,
+button[id*="convertBase"]:hover,
+button[id*="calculateStats"]:hover,
+button[id*="plotFunctionBtn"]:hover,
+button[id*="plotFunctionAndDerivativeBtn"]:hover,
+button[id*="solveProblemBtnModal"]:hover {
+    background-color: #16a34a;
+    border-color: #16a34a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
+}
+
+/* Clear history button styling */
+.clear-history-btn {
+    background-color: var(--accent-red);
+    color: white;
+    border: 2px solid var(--accent-red);
+    font-weight: 700;
+    transition: all var(--transition);
+}
+
+.clear-history-btn:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Modal close buttons */
+button[id*="closeCustomAlertModal"],
+button[id*="closePlotModal"],
+button[id*="closeSolveProblemModal"],
+button[id*="closeMatrixModal"],
+button[id*="closeEquationModal"],
+button[id*="closeBaseModal"],
+button[id*="closeStatsModal"],
+button[id*="closeUnitConverterModal"] {
+    background-color: var(--accent-red);
+    color: white;
+    font-weight: 700;
+    border: 2px solid var(--accent-red);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+}
+
+button[id*="closeCustomAlertModal"]:hover,
+button[id*="closePlotModal"]:hover,
+button[id*="closeSolveProblemModal"]:hover,
+button[id*="closeMatrixModal"]:hover,
+button[id*="closeEquationModal"]:hover,
+button[id*="closeBaseModal"]:hover,
+button[id*="closeStatsModal"]:hover,
+button[id*="closeUnitConverterModal"]:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
 }
 
 .calculator {

@@ -1,0 +1,3 @@
+- [x] Remove history-toggle button from index.html
+- [x] Remove history-panel div from index.html
+- [x] Remove historyToggle and historyPanel variables and event listener from calculator.js
