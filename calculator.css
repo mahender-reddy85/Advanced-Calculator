@@ -265,7 +265,7 @@ textarea:focus-visible {
         border-top: none;
         border-right: 1px solid var(--border-color);
         width: 220px; /* Adjusted width */
-        background-color: #1e293b; /* Darker navy background */
+        background-color: var(--bg-surface);
     }
 
     .nav-btn {
