@@ -118,14 +118,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function addToHistory(expression, result) {
+        if (!expression || !result) return; // Skip if either parameter is missing
+        
+        // Add to history array
+        history.unshift({ expression, result });
+        if (history.length > 10) history.pop(); // Keep history limited
+
+        // Only update DOM if historyList exists
+        const historyList = safeGetElement('history-list');
         if (historyList) {
             const entry = document.createElement('li');
             entry.textContent = `${expression} = ${result}`;
             historyList.prepend(entry);
-            history.unshift({ expression, result });
-            if (history.length > 10) history.pop(); // Keep history limited
-        } else {
-            console.warn("History list element not found for adding entry.");
         }
     }
 
