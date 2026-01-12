@@ -17,9 +17,7 @@ app.post("/solve", async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return res.status(500).json({ error: "GEMINI_API_KEY missing in .env" });
 
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" +
-      apiKey;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -31,13 +29,34 @@ app.post("/solve", async (req, res) => {
 
     const data = await response.json();
 
-    // Gemini text extraction
-    const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "No response received";
+    // Log the raw response for debugging
+    console.log("Gemini RAW:", JSON.stringify(data, null, 2));
+
+    // Check for API errors
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: data?.error?.message || "Gemini API failed",
+        raw: data
+      });
+    }
+
+    // Extract text from response
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      return res.status(500).json({
+        error: "Gemini returned no text in expected format",
+        raw: data
+      });
+    }
 
     res.json({ answer: text });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Server error:", err);
+    res.status(500).json({ 
+      error: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 });
 
