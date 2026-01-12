@@ -2,7 +2,7 @@
 
 A modern, feature-rich calculator web application with multiple calculation modes, graphing capabilities, and AI-powered problem solving.
 
-![Calculator Preview](calculator.png)
+![Calculator Preview](favicon.png)
 
 ## ✨ Features
 
