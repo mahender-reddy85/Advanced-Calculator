@@ -2,8 +2,6 @@
 
 A modern, feature-rich calculator web application with multiple calculation modes, graphing capabilities, and AI-powered problem solving.
 
-![Calculator Preview](favicon.png)
-
 ## ✨ Features
 
 - **Basic Calculator**: Standard arithmetic operations with a clean, intuitive interface
