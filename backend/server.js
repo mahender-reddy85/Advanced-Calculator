@@ -3,6 +3,22 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
+function extractText(data) {
+  // normal expected output
+  let text = data?.candidates?.[0]?.content?.parts
+    ?.map(p => p?.text)
+    ?.filter(Boolean)
+    ?.join("\n");
+
+  if (text) return text;
+
+  // sometimes content is directly as "text"
+  text = data?.candidates?.[0]?.content?.text;
+  if (text) return text;
+
+  return null;
+}
+
 dotenv.config();
 
 const app = express();
@@ -32,6 +48,9 @@ app.post("/solve", async (req, res) => {
     // Log the raw response for debugging
     console.log("Gemini RAW:", JSON.stringify(data, null, 2));
 
+    // For debugging: return raw response
+    // return res.json({ raw: data });
+
     // Check for API errors
     if (!response.ok) {
       return res.status(response.status).json({
@@ -40,17 +59,17 @@ app.post("/solve", async (req, res) => {
       });
     }
 
-    // Extract text from response
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    // Extract text from response using robust parsing
+    const answer = extractText(data);
 
-    if (!text) {
+    if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned no text in expected format",
+        error: "Gemini returned no extractable text",
         raw: data
       });
     }
 
-    res.json({ answer: text });
+    res.json({ answer });
   } catch (err) {
     console.error("Server error:", err);
     res.status(500).json({ 
