@@ -131,15 +131,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Helper function for Gemini API
     async function callGeminiAPI(payload) {
-        const apiKey = GEMINI_API_KEY;
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+        const apiUrl = 'https://advanced-calculator-hpav.onrender.com/solve';
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ prompt: payload.contents[0].parts[0].text })
         });
         if (!response.ok) throw new Error(`API error: ${response.status}`);
-        return await response.json();
+        const data = await response.json();
+        return { candidates: [{ content: { parts: [{ text: data.answer }] } }] };
     }
 
     // --- GEMINI PROBLEM SOLVER ---
