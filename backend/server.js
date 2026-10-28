@@ -19,6 +19,44 @@ function extractText(data) {
   return null;
 }
 
+async function callGemini(url, apiKey, prompt) {
+  const body = {
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: prompt.trim() }],
+      },
+    ],
+  };
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return { response, data };
+    }
+
+    // Retry only on 503 (temporary overload), not 429 (quota/rate-limit)
+    if (response.status === 503 && attempt < 3) {
+      const delay = attempt * 3000;
+      console.log(`Gemini 503. Retrying in ${delay / 1000}s...`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      continue;
+    }
+
+    return { response, data };
+  }
+}
+
 dotenv.config();
 
 const app = express();
@@ -35,61 +73,20 @@ app.post("/solve", async (req, res) => {
 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
 
-    const requestBody = {
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: prompt.trim(),
-            },
-          ],
-        },
-      ],
-    };
-
-    let response;
-    let data;
-
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": apiKey,
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      data = await response.json();
-
-      // Success
-      if (response.ok) {
-        break;
-      }
-
-      // Retry temporary Gemini failures
-      if (response.status === 503 || response.status === 429) {
-        console.log(`Gemini temporarily unavailable. Retry ${attempt}/3`);
-
-        if (attempt < 3) {
-          await new Promise((resolve) =>
-            setTimeout(resolve, attempt * 2000)
-          );
-        }
-
-        continue;
-      }
-
-      // Don't retry permanent errors
-      break;
-    }
+    const result = await callGemini(url, apiKey, prompt);
+    const { response, data } = result;
 
     console.log("Gemini RAW:", JSON.stringify(data, null, 2));
 
     if (!response.ok) {
+      // Return a user-friendly message for 503 instead of raw error
+      if (response.status === 503) {
+        return res.status(503).json({
+          error: "AI service is temporarily busy. Please try again in a moment.",
+        });
+      }
       return res.status(response.status).json({
-        error: data?.error?.message || "Gemini API request failed",
+        error: data?.error?.message || "Gemini API failed",
       });
     }
 
@@ -99,16 +96,16 @@ app.post("/solve", async (req, res) => {
     if (!answer) {
       return res.status(500).json({
         error: "Gemini returned no extractable text",
-        raw: data
+        raw: data,
       });
     }
 
     res.json({ answer });
   } catch (err) {
     console.error("Server error:", err);
-    res.status(500).json({ 
+    res.status(500).json({
       error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+      stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
   }
 });
