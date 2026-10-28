@@ -19,7 +19,14 @@ function extractText(data) {
   return null;
 }
 
-async function callGemini(url, apiKey, prompt) {
+// Models to try in order — if the primary is overloaded, fall back
+const GEMINI_MODELS = [
+  "gemini-3.8-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+];
+
+async function callGemini(apiKey, prompt) {
   const body = {
     contents: [
       {
@@ -29,32 +36,63 @@ async function callGemini(url, apiKey, prompt) {
     ],
   };
 
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify(body),
-    });
+  for (const model of GEMINI_MODELS) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
-    const data = await response.json();
+    // Up to 2 retries per model on 503
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify(body),
+      });
 
-    if (response.ok) {
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(`✅ Success with model: ${model}`);
+        return { response, data };
+      }
+
+      // On 503, retry once then try next model
+      if (response.status === 503 && attempt < 2) {
+        const delay = attempt * 3000;
+        console.log(`⏳ ${model} returned 503. Retrying in ${delay / 1000}s...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        continue;
+      }
+
+      // On 503 after retries exhausted, try next model
+      if (response.status === 503) {
+        console.log(`⚠️ ${model} still 503 after ${attempt} attempts. Trying next model...`);
+        break;
+      }
+
+      // On 404 (model unavailable), try next model
+      if (response.status === 404) {
+        console.log(`⚠️ ${model} not available (404). Trying next model...`);
+        break;
+      }
+
+      // Any other error (400, 401, 403, 429, etc.) — don't retry, return immediately
       return { response, data };
     }
-
-    // Retry only on 503 (temporary overload), not 429 (quota/rate-limit)
-    if (response.status === 503 && attempt < 3) {
-      const delay = attempt * 3000;
-      console.log(`Gemini 503. Retrying in ${delay / 1000}s...`);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-      continue;
-    }
-
-    return { response, data };
   }
+
+  // All models failed
+  return {
+    response: { ok: false, status: 503 },
+    data: {
+      error: {
+        code: 503,
+        message: "All available models are currently overloaded. Please try again later.",
+        status: "UNAVAILABLE",
+      },
+    },
+  };
 }
 
 dotenv.config();
@@ -71,15 +109,12 @@ app.post("/solve", async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return res.status(500).json({ error: "GEMINI_API_KEY missing in .env" });
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
-
-    const result = await callGemini(url, apiKey, prompt);
+    const result = await callGemini(apiKey, prompt);
     const { response, data } = result;
 
     console.log("Gemini RAW:", JSON.stringify(data, null, 2));
 
     if (!response.ok) {
-      // Return a user-friendly message for 503 instead of raw error
       if (response.status === 503) {
         return res.status(503).json({
           error: "AI service is temporarily busy. Please try again in a moment.",
