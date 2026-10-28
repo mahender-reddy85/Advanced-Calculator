@@ -35,30 +35,61 @@ app.post("/solve", async (req, res) => {
 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-      }),
-    });
+    const requestBody = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: prompt.trim(),
+            },
+          ],
+        },
+      ],
+    };
 
-    const data = await response.json();
+    let response;
+    let data;
 
-    // Log the raw response for debugging
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      data = await response.json();
+
+      // Success
+      if (response.ok) {
+        break;
+      }
+
+      // Retry temporary Gemini failures
+      if (response.status === 503 || response.status === 429) {
+        console.log(`Gemini temporarily unavailable. Retry ${attempt}/3`);
+
+        if (attempt < 3) {
+          await new Promise((resolve) =>
+            setTimeout(resolve, attempt * 2000)
+          );
+        }
+
+        continue;
+      }
+
+      // Don't retry permanent errors
+      break;
+    }
+
     console.log("Gemini RAW:", JSON.stringify(data, null, 2));
 
-    // For debugging: return raw response
-    // return res.json({ raw: data });
-
-    // Check for API errors
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data?.error?.message || "Gemini API failed",
-        raw: data
+        error: data?.error?.message || "Gemini API request failed",
       });
     }
 
